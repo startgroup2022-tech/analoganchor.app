@@ -1,0 +1,6 @@
+{
+  "name": "Analog Anchor",
+  "description": "A premium digital discipline system for parents, students, and professionals in the GCC, built on the physical whiteboard Anchor and Evening Two-Tap Protocol.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

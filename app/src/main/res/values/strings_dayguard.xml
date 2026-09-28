@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    
+    <string name="global_streak_widget_description">Track your total focused days across all apps.</string>
+    <string name="app_streak_widget_description">Track your focus streak for a specific app.</string>
+    <string name="daily_screen_time">Daily Screen Time</string>
+    <string name="daily_screen_time_target">Daily Screen Time Target</string>
+    <string name="set_a_goal_to_help_you_stay_mindful_of_your_device_usage">Set a goal to help you stay mindful of your device usage.</string>
+    <string name="top_used_apps">Top Used Apps</string>
+    <string name="see_full_list">See Full List</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="trend">Trend</string>
+    <string name="protected_apps">Protected Apps</string>
+    <string name="choose_which_apps_require_the_day_guard_mindful_gateway">Choose which apps require the Day Guard mindful gateway.</string>
+    <string name="anchor_nfc_authority">Anchor NFC Authority</string>
+    <string name="day_guard">Day Guard</string>
+    <string name="make_access_smaller_anytime_making_it_larger_requires_the_anchor">Make access smaller anytime. Making it larger requires the Anchor.</string>
+    <string name="app_permissions">App Permissions</string>
+    <string name="rules_triggers">Rules &amp; Triggers</string>
+    <string name="mindful_gateway">Mindful Gateway</string>
+    <string name="water_pause">Water Pause</string>
+    <string name="optional_overlays_utilities">Optional Overlays &amp; Utilities</string>
+    <string name="total_usage_pill">Total Usage Pill</string>
+    <string name="session_usage_overlay">Floating Session Timer</string>
+    <string name="early_kick">Early Kick</string>
+    <string name="pause_media">Pause Media</string>
+    <string name="general_settings">General Settings</string>
+    <string name="whitelist_apps">Whitelist Apps</string>
+    <string name="backup_restore">Backup &amp; Restore</string>
+    <string name="session_duration_policy">Session Duration Policy</string>
+    <string name="interrupt_every_protected_app_with_a_mindful_pause">Interrupt every protected app with a mindful pause.</string>
+    <string name="show_a_mandatory_30_second_deep_breath_pause_before_duration_choice">Show a mandatory 30-second deep breath pause before duration choice.</string>
+    <string name="show_your_total_screen_time_in_the_overlay">Show your total screen time in the overlay.</string>
+    <string name="show_a_floating_hud_with_remaining_time_when_an_app_is_allowed">Show a floating timer with remaining time while using an allowed app.</string>
+    <string name="build_mindfulness_by_ejecting_from_apps_early">Build mindfulness by ejecting from apps early.</string>
+    <string name="automatically_pause_media_when_an_overlay_appears">Automatically pause media when an overlay appears.</string>
+    <string name="manage_apps_that_bypass_all_restrictions">Manage apps that bypass all restrictions</string>
+    <string name="manage_database_backup_restore">Manage database backup/restore</string>
+    <string name="active_schedules">Active Schedules</string>
+    <string name="add_schedule">Add Schedule</string>
+    <string name="usage">Usage</string>
+    <string name="other_apps">Other Apps</string>
+    <string name="settings">Settings</string>
+    <string name="bedtime_activity">Bedtime Activity</string>
+    <string name="usage_efficiency">Usage Efficiency</string>
+    <string name="total_period">Total Period</string>
+    <string name="bedtime_mode">Bedtime Mode</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="repeat_days">Repeat Days</string>
+    <string name="bedtime_streak">Bedtime Streak</string>
+    <string name="best_streak">Best Streak</string>
+    <string name="night_streak">night streak</string>
+    <string name="allowed_apps">Allowed Apps</string>
+    <string name="time_distribution">Time distribution</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="history">History</string>
+    <string name="wind_down_notification">Wind Down Notification</string>
+    <string name="notify_30_minutes_before_bedtime">Notify 30 minutes before bedtime</string>
+    <string name="do_not_disturb">Do Not Disturb</string>
+    <string name="silence_notifications_during_bedtime">Silence notifications during bedtime</string>
+    <string name="wind_down_restrictions">Wind Down Restrictions</string>
+    <string name="restrict_app_usage_30_min_before_bedtime">Restrict app usage 30-min before bedtime</string>
+    <string name="hud_appearance">Floating Timer Appearance</string>
+    <string name="preview">Preview</string>
+    <string name="s_15m">15m</string>
+    <string name="interface_overlays">Interface Overlays</string>
+    <string name="advanced_control">Advanced Control</string>
+    <string name="show_your_total_screen_time_in_the_mindful_pause_overlay">Show your total screen time in the mindful pause overlay</string>
+    <string name="interrupt_every_non_whitelisted_app_with_a_mindful_pause_even_without_a_specific_shield">Interrupt every non-whitelisted app with a mindful pause, even without a specific shield</string>
+    <string name="optionally_eject_from_apps_5_minutes_before_your_time_limit_expires">Optionally eject from apps 5 minutes before your time limit expires</string>
+    <string name="whitelisted_apps_will_bypass_all_day_guard_restrictions_schedules_shields_and_goals">Whitelisted apps will bypass all Day Guard restrictions (Schedules, Shields, and Goals).</string>
+    <string name="system_core">System Core</string>
+    <string name="preinstalled">Preinstalled</string>
+    <string name="search_apps">Search apps...</string>
+    <string name="user_apps">User Apps</string>
+    <string name="preinstalled_apps">Preinstalled Apps</string>
+    <string name="system_apps">System Apps</string>
+    <string name="highlight">Highlight</string>
+    <string name="about_you">About You</string>
+    <string name="app_usage">App Usage</string>
+    <string name="hourly_usage">Hourly Usage</string>
+    <string name="tap_a_bar_for_details">Tap a bar for details</string>
+    <string name="focus_efficiency">Focus Efficiency</string>
+    <string name="daily_chronotype">Daily Chronotype</string>
+    <string name="your_peak_activity_period">Your peak activity period</string>
+    <string name="usage_pattern">Usage Pattern</string>
+    <string name="avg_session">avg / session</string>
+    <string name="goal_consistency">Goal Consistency</string>
+    <string name="weekly_avg">Weekly Avg</string>
+    <string name="top_activities">Top Activities</string>
+    <string name="last_14_days">Last 14 Days</string>
+    <string name="target_met">Target Met</string>
+    <string name="usage_trends">Usage Trends</string>
+    <string name="mindful_pause">Mindful Pause</string>
+    <string name="day_guard_active">Analog Anchor is active for this app.</string>
+    <string name="mindful_gateway_guarding">Mindful Gateway is guarding your focus.</string>
+    <string name="phase_1_security_puzzle">Phase 1: Security Puzzle</string>
+    <string name="time_remaining">Time remaining: %1$ss</string>
+    <string name="match_the_sequence">Match the sequence</string>
+    <string name="phase_2_verification">Phase 2: Verification</string>
+    <string name="hold_the_circle">Hold the circle for %1$d seconds</string>
+    <string name="phase_3_processing">Phase 3: Processing</string>
+    <string name="finalizing_permission">Finalizing permission...</string>
+    <string name="access_granted">Access Granted</string>
+    <string name="how_long_should_we_pause">How long should we pause?</string>
+    <string name="until_i_resume">Until I resume</string>
+    <string name="ready_to_make_progress">Ready to make some progress?</string>
+    <string name="snooze_for_5_minutes">Snooze for 5 minutes</string>
+    <string name="hang_up">Hang up</string>
+    <string name="answer">Answer</string>
+    <string name="pick_app">Pick App</string>
+    <string name="take_a_deep_breath">Take a deep breath...</string>
+    <string name="drink_some_water">Have you had enough water today?</string>
+    <string name="nevermind">Nevermind</string>
+    <string name="hour_1">1 Hour</string>
+    <string name="hours_6">6 Hours</string>
+    <string name="hours_24">24 Hours</string>
+    <string name="select_app_to_open">Select App to Open</string>
+    <string name="choose_which_goal_you_want_to_work_on_right_now">Choose which goal you want to work on right now.</string>
+    <string name="return_to_nfc">Settings Override Authorization required to change this setting.</string>
+    <string name="expired">Expired</string>
+    <string name="nfc_not_registered">Register the whiteboard Anchor NFC tag. Keep it at your writing station.</string>
+    <string name="nfc_registered">Whiteboard Anchor NFC tag is registered.</string>
+    <string name="policy_edit_window_active">Policy Edit Window: Active</string>
+    <string name="policy_edit_window_locked">Policy Edit Window: Locked</string>
+    <string name="coming_soon">Coming Soon</string>
+    <string name="to_go">To Go</string>
+    <string name="left">Left</string>
+    <string name="uses_exhausted_reset_in">Uses Exhausted &#8226; Reset in %1$s</string>
+    <string name="stats">Stats</string>
+    <string name="active">Active</string>
+    <string name="inactive">Inactive</string>
+    <string name="target_label">target</string>
+    <string name="limit_label">limit</string>
+    <string name="add_shield">Add Shield</string>
+    <string name="add_goal">Add Goal</string>
+
+    <!-- Overlay UI Strings -->
+    <string name="close_app">Close App</string>
+    <string name="last_chance_warning">⚠️ Last chance — next time this app will close automatically</string>
+    <string name="how_long_to_use">How long do you want to use it?</string>
+    <string name="emergency_use_select_duration">Emergency Use: Select Duration</string>
+    <string name="uses_limit_reached">Uses limit reached.\nRefresh in %1$s</string>
+    <string name="daily_limit_reached">Daily limit reached.\nCome back tomorrow.</string>
+    <string name="time_left_today">%1$s left today</string>
+    <string name="time_left">%1$s left</string>
+    <string name="total_label">Total</string>
+    <string name="its_bedtime">It\'s Bedtime!</string>
+    <string name="bedtime_subtitle">Finish up soon and continue tomorrow.</string>
+    <string name="hold_to_use_emergency">Hold for 5s to use Emergency</string>
+    <string name="hold_progress">Hold for %1$ds...</string>
+    <string name="until_time">Until %1$s</string>
+    <string name="bedtime_description">Rest is productive too. This app is restricted until your bedtime ends.</string>
+    <string name="goal_pursuit">Goal Pursuit</string>
+    <string name="goal_pursuit_description">You\'re working towards your usage goal.</string>
+    <string name="target_time">Target: %1$s</string>
+    <string name="estimated_finish">Estimated finish</string>
+    <string name="got_it_continue">Got it, let\'s continue</string>
+    <string name="keep_it_up">Keep it up!</string>
+    <string name="continue_label">Continue</string>
+    <string name="schedule_active">Schedule Active: %1$s</string>
+    <string name="blocked_by_schedule_desc">This app is blocked by your schedule.</string>
+    <string name="allow_list_schedule_desc">Only selected apps are allowed during this schedule.</string>
+    <string name="emergency_count">Emergency: %1$d</string>
+    <string name="active_label">Active: %1$s</string>
+    <string name="blocked_by_schedule">Blocked by Schedule</string>
+    <string name="not_on_allow_list">Not on Allow-list</string>
+    <string name="wind_down">Wind Down</string>
+    <string name="wind_down_session_used_desc">You\'ve used your Wind Down session for this app. It\'s time to rest.</string>
+    <string name="wind_down_approaching_desc">Bedtime is approaching. Take a final look before we lock things down.</string>
+    <string name="no_sessions_available">No more sessions available tonight.</string>
+    <string name="select_session_duration">Select your final session duration:</string>
+    <string name="minutes_label">%1$d mins</string>
+    <string name="minutes_label_short">%1$d mins</string>
+    <string name="hide_tooltip">Double click to\nhide for 30s</string>
+    <string name="achieved_label">Achieved</string>
+    <string name="goal_achieved_label">Goal Achieved</string>
+    <string name="percent_done">%1$d%% Done</string>
+    <string name="percent_value">%1$d%%</string>
+
+    <string-array name="motivational_messages">
+        <item>Time for a quick stretch!</item>
+        <item>Have you had enough water today?</item>
+        <item>Take 3 deep breaths...</item>
+        <item>Ready to crush your goals?</item>
+        <item>Productivity is a marathon, not a sprint.</item>
+        <item>Check your to-do list for a quick win!</item>
+        <item>A small step today is a big leap tomorrow.</item>
+        <item>Stay focused, stay mindful.</item>
+        <item>Remember your homework or tasks!</item>
+        <item>Do one small productive thing now.</item>
+        <item>Do 15 Pushups</item>
+    </string-array>
+
+    <string-array name="goal_achieved_messages">
+        <item>Target reached! Keep the momentum going.</item>
+        <item>Goal achieved! You\'re doing great.</item>
+        <item>Mission accomplished! Stay focused.</item>
+        <item>Limit reached! Time to level up.</item>
+        <item>You made it! Keep up the good work.</item>
+        <item>Goal unlocked! Stay productive.</item>
+        <item>Outstanding! You\'ve met your target.</item>
+    </string-array>
+</resources>

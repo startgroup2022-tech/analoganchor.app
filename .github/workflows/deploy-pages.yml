@@ -1,0 +1,53 @@
+﻿name: Deploy Support Tool to GitHub Pages
+# Triggering redeployment after Pages settings update
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: workflow
+        continue-on-error: true
+
+      - name: Create pages directory with support tool
+        run: |
+          mkdir -p _site
+          cp support-tool.html _site/index.html
+          cp support-tool.html _site/support-tool.html
+          cp decoy-tool.html _site/decoy-tool.html
+          touch _site/.nojekyll
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+        continue-on-error: true
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          timeout: 1200000
+        continue-on-error: true

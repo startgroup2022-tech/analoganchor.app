@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@raw/fajr_default_ringtone,@xml/analog_anchor_device_admin,@xml/zenith_accessibility_service_config,@xml/day_guard_widget_info,@xml/nfc_tech_list,@xml/file_paths,@xml/backup_rules,@xml/data_extraction_rules"
+    tools:shrinkMode="strict" />

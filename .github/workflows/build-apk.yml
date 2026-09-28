@@ -1,0 +1,62 @@
+name: Build Android Testing APK
+on: [push, workflow_dispatch]
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: Restore Keystore File
+      run: |
+        if [ -f "debug.keystore.base64" ]; then
+          base64 -d debug.keystore.base64 > debug.keystore
+          echo "Keystore restored from base64 file."
+        else
+          echo "Base64 file not found, creating a blank placeholder."
+          touch debug.keystore
+        fi
+    - name: Build with Gradle
+      run: |
+        if [ -f "./gradlew" ]; then
+          chmod +x ./gradlew
+          ./gradlew assembleDebug
+        elif [ -f "../gradlew" ]; then
+          cd .. && chmod +x ./gradlew && ./gradlew assembleDebug
+        else
+          gradle assembleDebug
+        fi
+        
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Testing-APK
+        path: |
+          **/build/outputs/apk/debug/*.apk
+        retention-days: 1
+      continue-on-error: true
+
+    - name: Publish APK to GitHub Releases (Bypass Quota)
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: "v2.6-build-${{ github.run_number }}"
+        name: "Analog Anchor v2.6 - Build #${{ github.run_number }}"
+        body: "Automated test APK build #${{ github.run_number }} (commit: ${{ github.sha }})."
+        files: |
+          **/build/outputs/apk/debug/*.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      continue-on-error: true

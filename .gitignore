@@ -1,0 +1,35 @@
+*.iml
+.gradle
+.kotlin
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/app/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+.env
+debug.keystore
+debug.keystore.base64
+
+# Offline Toolchains (JDK & Gradle)
+/gradle-9.3.1/
+/jdk-21.0.3+9/
+*.apk
+.build-outputs/
+
+/.idea/codeStyles/
+/.idea/
+
+# Intermediate release bundles
+Analog Anchor V2.8.[1-6]-release.aab
+
+
+my-upload-key.jks

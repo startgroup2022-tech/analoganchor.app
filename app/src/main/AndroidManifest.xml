@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation" tools:targetApi="s" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" tools:targetApi="s" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" tools:targetApi="s" />
+
+    <uses-feature android:name="android.hardware.nfc" android:required="false" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+    <uses-feature android:name="android.hardware.location.network" android:required="false" />
+    <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="false" />
+    <uses-feature android:name="android.hardware.sensor.stepdetector" android:required="false" />
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
+
+    <queries>
+        <package android:name="cz.mobilesoft.appblock" />
+        <package android:name="com.appblock.app" />
+        <package android:name="cz.droidsonroids.appblock" />
+        <package android:name="com.etrisad.zenith" />
+        <package android:name="com.analoganchor.dayguard" />
+        <package android:name="com.analoganchor.day_guard" />
+        <package android:name="com.analoganchor.offlinechallenge" />
+    </queries>
+
+    <application
+        android:name=".AnalogAnchorApplication"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher_custom"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_custom_round"
+        android:supportsRtl="false"
+        android:theme="@style/Theme.MyApplication">
+
+        <meta-data
+            android:name="com.mapbox.token"
+            android:value="@string/mapbox_access_token" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MyApplication"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            
+            <!-- Anchor tag: direct launch, no chooser, routes to Day Guard tab -->
+            <intent-filter android:priority="9999">
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/vnd.com.analoganchor.app.anchor" />
+            </intent-filter>
+            <!-- Fajr Eraser tag: direct launch, no chooser, routes to Fajr lockdown confirmation -->
+            <intent-filter android:priority="9999">
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/vnd.com.analoganchor.app.fajr" />
+            </intent-filter>
+            <!-- Fallback for unwritten tags during reader discovery -->
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/nfc_tech_list" />
+        </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.analoganchor.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <receiver
+            android:name=".service.FajrAlarmReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.analoganchor.app.action.FAJR_ALARM" />
+                <action android:name="com.analoganchor.app.action.FAJR_5HOUR_WARNING" />
+                <action android:name="com.analoganchor.app.action.FAJR_REMINDER" />
+                <action android:name="com.analoganchor.app.action.JUMUAH_ALARM" />
+                <action android:name="com.analoganchor.app.action.ALARM_PENALTY_TIMEOUT" />
+                <action android:name="com.analoganchor.app.action.REFLECTION_COMPLETE" />
+                <action android:name="com.analoganchor.app.action.ACKNOWLEDGE_ISHA" />
+                <action android:name="com.analoganchor.app.action.CHECK_ISHA_DORMANCY" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name=".service.FajrAlarmService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Alarm clock sound playback and wake-up enforcement." />
+        </service>
+
+        <receiver
+            android:name=".service.AnalogAnchorDeviceAdminReceiver"
+            android:description="@string/device_admin_description"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/analog_anchor_device_admin" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Day Guard Accessibility Service - monitors foreground apps AND performs AppBlock gesture unlock -->
+        <service
+            android:name=".service.ZenithAccessibilityService"
+            android:label="Zenith System Monitor"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/zenith_accessibility_service_config" />
+        </service>
+
+        <!-- Zenith Notification Listener Service -->
+        <service
+            android:name=".service.ZenithNotificationListener"
+            android:label="Zenith Notification Intercept"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <!-- Day Guard Foreground Service to keep app process alive in the background -->
+        <service
+            android:name=".service.DayGuardForegroundService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="App blocking utility to enforce focus schedules and bedtime lockouts." />
+        </service>
+
+        <!-- Quick Settings Tile for Day Guard Monitor -->
+        <service
+            android:name=".service.DayGuardTileService"
+            android:icon="@drawable/ic_anchor_lock"
+            android:label="Day Guard Monitor"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <!-- App Widget Provider for Day Guard -->
+        <receiver
+            android:name=".service.DayGuardWidgetProvider"
+            android:label="Day Guard Monitor"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/day_guard_widget_info" />
+        </receiver>
+
+        <!-- Spotlight Overlay Service - draws dim curtain + cutout to guide user in Accessibility Settings -->
+        <service
+            android:name=".service.SpotlightOverlayService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!-- Boot Receiver to reschedule alarms -->
+        <receiver
+            android:name=".service.BootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Prayer Buffer DND Auto-Restore Receiver -->
+        <receiver
+            android:name=".service.PrayerDndRestoreReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.analoganchor.app.action.RESTORE_PRAYER_DND" />
+                <action android:name="com.analoganchor.app.action.PRAYER_BUFFER_START" />
+                <action android:name="com.analoganchor.app.action.PRAYER_BUFFER_END" />
+                <action android:name="com.analoganchor.app.action.ACTIVATE_PRAYER_DND_DIRECT" />
+                <action android:name="com.analoganchor.app.action.PRAYER_ADHAN_ARRIVED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Partner Challenge Broadcast Receiver for Offline Challenge App Interop -->
+        <receiver
+            android:name=".service.PartnerChallengeBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.analoganchor.app.ACTION_PARTNER_CHALLENGE_STARTED" />
+                <action android:name="com.analoganchor.app.ACTION_PARTNER_CHALLENGE_COMPLETED" />
+                <action android:name="com.analoganchor.app.ACTION_PARTNER_CHALLENGE_CANCELLED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

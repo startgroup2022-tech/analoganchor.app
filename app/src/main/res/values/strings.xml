@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Analog Anchor</string>
+    <string name="accessibility_service_description">Analog Anchor monitors the AppBlock PIN screen and uses secure gesture taps to enter the authorized unlock PIN. It only activates when AppBlock\'s keypad is on screen and never reads or transmits personal data.</string>
+    <string name="device_admin_description">Enables Analog Anchor to become an Android device admin so uninstalling requires first deactivating this admin privilege in system settings.</string>
+    <string name="zenith_accessibility_service_description">Day Guard monitors which app is in the foreground to enforce mindful usage pauses, session time limits, and screen overlays. It does not read or transmit personal data.</string>
+</resources>

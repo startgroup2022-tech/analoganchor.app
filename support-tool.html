@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analog Anchor — Support Token Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── DESIGN TOKENS (mirrors the Android app Color.kt) ────────────────── */
+        :root {
+            --obsidian-bg:       #0B1012;
+            --obsidian-surface:  #11191D;
+            --deep-panel:        #172126;
+            --obsidian-border:   #2B3A40;
+            --muted-silver:      #A2AFB6;
+            --warm-off-white:    #F3F8FA;
+            --glow-cyan:         #7DEEFF;   /* matches GlowGreen in app  */
+            --cyan-aura:         #1FE6FF;
+            --refined-cyan:      #4DC8DD;
+            --signal-amber:      #F3B65C;
+            --danger-red:        #FF5252;
+            --font-main:         'Outfit', sans-serif;
+            --font-mono:         'Roboto Mono', monospace;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--obsidian-bg);
+            color: var(--warm-off-white);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 32px 16px 64px;
+            overflow-x: hidden;
+        }
+
+        /* ── AMBIENT BACKGROUND GLOW ─────────────────────────────────────────── */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -200px; left: 50%; transform: translateX(-50%);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(125,238,255,0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── HEADER ──────────────────────────────────────────────────────────── */
+        header {
+            text-align: center;
+            margin-bottom: 36px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(125,238,255,0.07);
+            border: 1px solid rgba(125,238,255,0.2);
+            border-radius: 999px;
+            padding: 6px 16px;
+            font-size: 11px;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--glow-cyan);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 900;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #FFFFFF 20%, var(--glow-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--muted-silver);
+            font-size: 15px;
+            line-height: 22px;
+            max-width: 360px;
+            margin: 0 auto;
+        }
+
+        /* ── CARD ─────────────────────────────────────────────────────────────── */
+        .card {
+            width: 100%;
+            max-width: 500px;
+            background: var(--deep-panel);
+            border: 1px solid var(--obsidian-border);
+            border-radius: 20px;
+            padding: 32px 28px;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 16px;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(125,238,255,0.25), transparent 60%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        /* ── FORM FIELDS ─────────────────────────────────────────────────────── */
+        .field {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: var(--glow-cyan);
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: 100%;
+            height: 56px;
+            background: var(--obsidian-surface);
+            border: 1.5px solid var(--obsidian-border);
+            border-radius: 10px;
+            color: var(--warm-off-white);
+            font-size: 20px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            letter-spacing: 3px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            padding: 0 16px;
+        }
+
+        input::placeholder {
+            color: var(--obsidian-border);
+            letter-spacing: 2px;
+            font-size: 18px;
+        }
+
+        input:focus {
+            border-color: var(--glow-cyan);
+            box-shadow: 0 0 0 3px rgba(125,238,255,0.12);
+        }
+
+        input.input-phone {
+            font-size: 17px;
+            letter-spacing: 1px;
+        }
+
+        input.input-phone::placeholder {
+            font-size: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        select {
+            width: 100%;
+            height: 56px;
+            background: var(--obsidian-surface);
+            border: 1.5px solid var(--obsidian-border);
+            border-radius: 10px;
+            color: var(--warm-off-white);
+            font-size: 16px;
+            font-weight: 700;
+            font-family: var(--font-main);
+            outline: none;
+            padding: 0 16px;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        select:focus {
+            border-color: var(--glow-cyan);
+            box-shadow: 0 0 0 3px rgba(125,238,255,0.12);
+        }
+
+        .field-hint {
+            font-size: 12px;
+            color: var(--muted-silver);
+            margin-top: 7px;
+            line-height: 17px;
+        }
+
+        .request-banner {
+            background: rgba(125,238,255,0.06);
+            border: 1px solid rgba(125,238,255,0.18);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 24px;
+            color: var(--muted-silver);
+            font-size: 13px;
+            line-height: 20px;
+        }
+
+        .request-banner strong {
+            display: block;
+            color: var(--glow-cyan);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 1.6px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        /* ── PRIMARY BUTTON ──────────────────────────────────────────────────── */
+        .btn-primary {
+            width: 100%;
+            height: 56px;
+            background: linear-gradient(135deg, var(--refined-cyan), var(--glow-cyan));
+            border: none;
+            border-radius: 12px;
+            color: var(--obsidian-bg);
+            font-size: 15px;
+            font-weight: 800;
+            font-family: var(--font-main);
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: transform 0.12s, filter 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 24px rgba(125,238,255,0.2);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.08);
+            box-shadow: 0 6px 32px rgba(125,238,255,0.35);
+        }
+
+        .btn-primary:active { transform: scale(0.98); }
+
+        /* ── TOKEN OUTPUT ─────────────────────────────────────────────────────── */
+        .token-result {
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--obsidian-border);
+            margin: 28px 0;
+        }
+
+        .result-label {
+            font-size: 11px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: var(--muted-silver);
+            margin-bottom: 12px;
+        }
+
+        .token-display {
+            background: var(--obsidian-bg);
+            border: 1.5px solid rgba(125,238,255,0.3);
+            border-radius: 12px;
+            padding: 20px 16px;
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .token-display:hover {
+            border-color: var(--glow-cyan);
+            box-shadow: 0 0 0 3px rgba(125,238,255,0.08);
+        }
+
+        .token-string {
+            font-family: var(--font-mono);
+            font-size: clamp(15px, 4.6vw, 21px);
+            line-height: 1.55;
+            font-weight: 700;
+            color: var(--glow-cyan);
+            letter-spacing: 1.5px;
+            word-break: break-all;
+            user-select: all;
+        }
+
+        .copy-hint {
+            font-size: 12px;
+            color: var(--muted-silver);
+            margin-top: 8px;
+            transition: color 0.2s;
+        }
+
+        .copy-hint.copied { color: var(--signal-amber); }
+
+        /* ── ACTION BUTTONS ──────────────────────────────────────────────────── */
+        .action-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .btn-action {
+            flex: 1;
+            height: 52px;
+            border-radius: 10px;
+            border: 1.5px solid var(--obsidian-border);
+            background: var(--obsidian-surface);
+            color: var(--warm-off-white);
+            font-size: 14px;
+            font-weight: 700;
+            font-family: var(--font-main);
+            cursor: pointer;
+            transition: background 0.18s, border-color 0.18s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-action:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); }
+        .btn-action:active { transform: scale(0.97); }
+
+        .btn-action.whatsapp {
+            border-color: rgba(37,211,102,0.4);
+            color: #25D366;
+        }
+        .btn-action.whatsapp:hover {
+            background: rgba(37,211,102,0.08);
+            border-color: rgba(37,211,102,0.7);
+        }
+
+        /* ── WHATSAPP MESSAGE PREVIEW ─────────────────────────────────────────── */
+        .whatsapp-preview {
+            display: none;
+            margin-top: 16px;
+            background: rgba(37,211,102,0.05);
+            border: 1px solid rgba(37,211,102,0.2);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 14px;
+            line-height: 22px;
+            color: var(--warm-off-white);
+            white-space: pre-wrap;
+            font-family: var(--font-main);
+            position: relative;
+        }
+
+        .whatsapp-preview .preview-copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(37,211,102,0.15);
+            border: 1px solid rgba(37,211,102,0.35);
+            border-radius: 6px;
+            color: #25D366;
+            font-size: 11px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            padding: 4px 10px;
+            cursor: pointer;
+            letter-spacing: 1px;
+        }
+
+        /* ── NOTICE BOX ──────────────────────────────────────────────────────── */
+        .notice {
+            margin-top: 20px;
+            background: rgba(243,182,92,0.05);
+            border: 1px solid rgba(243,182,92,0.2);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 13px;
+            line-height: 21px;
+            color: var(--muted-silver);
+        }
+
+        .notice strong { color: var(--signal-amber); }
+
+        /* ── DECODE TAB ──────────────────────────────────────────────────────── */
+        .tabs {
+            display: flex;
+            gap: 0;
+            background: var(--obsidian-surface);
+            border: 1px solid var(--obsidian-border);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 28px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-btn {
+            flex: 1;
+            height: 40px;
+            background: transparent;
+            border: none;
+            border-radius: 9px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: var(--font-main);
+            letter-spacing: 1px;
+            color: var(--muted-silver);
+            cursor: pointer;
+            transition: background 0.18s, color 0.18s;
+            min-width: 0;
+            padding: 0 6px;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: var(--deep-panel);
+            color: var(--glow-cyan);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+        }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ── DECODE RESULT ───────────────────────────────────────────────────── */
+        .decode-result {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            background: var(--obsidian-bg);
+            border: 1.5px solid var(--obsidian-border);
+            border-radius: 12px;
+            text-align: center;
+            animation: slideUp 0.25s ease;
+        }
+
+        .decode-result.valid { border-color: rgba(125,238,255,0.4); }
+        .decode-result.invalid { border-color: rgba(255,82,82,0.4); }
+
+        .decode-label {
+            font-size: 11px;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .decode-label.valid { color: var(--glow-cyan); }
+        .decode-label.invalid { color: var(--danger-red); }
+
+        .decoded-pin {
+            font-family: var(--font-mono);
+            font-size: 38px;
+            font-weight: 700;
+            color: var(--warm-off-white);
+            letter-spacing: 8px;
+        }
+
+        .decode-sub {
+            font-size: 13px;
+            color: var(--muted-silver);
+            margin-top: 6px;
+        }
+
+        @media (max-width: 420px) {
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+
+            .action-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="brand-badge">⚓ Analog Anchor</div>
+        <h1>Support System</h1>
+        <p class="subtitle">Offline emergency unlock — generate a secure token and send it to your client without exposing the real PIN.</p>
+    </header>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab-btn active" id="tab-encode-btn" onclick="switchTab('encode')">FIRST CODE</button>
+        <button class="tab-btn" id="tab-followup-btn" onclick="switchTab('followup')">FOLLOW-UP</button>
+        <button class="tab-btn" id="tab-decode-btn" onclick="switchTab('decode')">VERIFY TOKEN</button>
+    </div>
+
+    <!-- ═══════════════ ENCODE (GENERATE) PANEL ═══════════════════════════════ -->
+    <div class="card tab-panel active" id="tab-encode">
+
+        <div class="request-banner">
+            <strong>Code 1 of 3</strong>
+            Use this for the first customer request only. It is still a temporary 60-minute emergency code.
+        </div>
+
+        <!-- PIN INPUT -->
+        <div class="field">
+            <label for="pin-input">Strict-Mode PIN Code</label>
+            <input type="text"
+                   id="pin-input"
+                   inputmode="numeric"
+                   placeholder="e.g. 5222"
+                   maxlength="8"
+                   oninput="clearResult()"
+                   autocomplete="off">
+            <p class="field-hint">Enter the AppBlock strict-mode PIN (digits only, 4–8 characters).</p>
+        </div>
+
+        <!-- WHATSAPP NUMBER (OPTIONAL) -->
+        <div class="field">
+            <label for="wa-number">Client WhatsApp Number <span style="font-weight:400;letter-spacing:0;text-transform:none;font-size:10px;color:var(--muted-silver)">(optional)</span></label>
+            <input type="tel"
+                   id="wa-number"
+                   class="input-phone"
+                   placeholder="+966501234567"
+                   autocomplete="off">
+            <p class="field-hint">With country code (e.g. +966…). If provided, the button below opens a direct WhatsApp chat.</p>
+        </div>
+
+        <!-- GENERATE BUTTON -->
+        <button class="btn-primary" onclick="generateToken('encode')">GENERATE SECURE TOKEN</button>
+        <div id="encode-result-anchor"></div>
+
+        <!-- ─── TOKEN RESULT (shown after generation) ─────────────────────────── -->
+        <div class="token-result" id="token-result">
+            <div class="divider"></div>
+
+            <p class="result-label" id="result-label">Secure Token — Tap to Copy</p>
+            <div class="token-display" id="token-display" onclick="copyToken()">
+                <div class="token-string" id="token-string">AA-ANCHOR-H7Q2M-KAEEE7X2P-P4X8R-Z2M5C-Q9V7B-VGU8T-EXP60</div>
+                <div class="copy-hint" id="copy-hint">Tap to copy</div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="action-row">
+                <button class="btn-action" onclick="copyToken()">📋 Copy Token</button>
+                <button class="btn-action whatsapp" id="wa-btn" onclick="sendWhatsApp()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 0C5.373 0 0 5.373 0 12c0 2.112.553 4.09 1.518 5.814L.057 23.882a.5.5 0 0 0 .625.625l6.068-1.461A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.626 0 12 0zm0 21.818a9.794 9.794 0 0 1-5.042-1.395l-.36-.214-3.734.9.915-3.64-.236-.374A9.818 9.818 0 1 1 12 21.818z"/></svg>
+                    Send via WhatsApp
+                </button>
+            </div>
+
+            <!-- WHATSAPP MESSAGE PREVIEW -->
+            <div class="whatsapp-preview" id="wa-preview">
+                <button class="preview-copy-btn" onclick="copyWaMessage()">COPY MSG</button>
+                <span id="wa-message-text"></span>
+            </div>
+        </div>
+
+        <!-- NOTICE -->
+        <div class="notice">
+            <strong>How it works:</strong> Enter the PIN, generate the long serial token, and send it to the accountability contact. The client enters the token into <em>Analog Anchor</em>, which decodes it internally and auto-fills the AppBlock keypad. The real PIN is never visible to the client.
+        </div>
+    </div>
+
+    <!-- ═══════════════ FOLLOW-UP PANEL ══════════════════════════════════════ -->
+    <div class="card tab-panel" id="tab-followup">
+
+        <div class="request-banner">
+            <strong>Code 2 or 3 of 3</strong>
+            Use this when the same customer asks again after the first temporary code. Code 3 is the final emergency code.
+        </div>
+
+        <div class="field">
+            <label for="followup-pin-input">Strict-Mode PIN Code</label>
+            <input type="text"
+                   id="followup-pin-input"
+                   inputmode="numeric"
+                   placeholder="e.g. 5222"
+                   maxlength="8"
+                   oninput="clearResult()"
+                   autocomplete="off">
+            <p class="field-hint">Use the same real AppBlock PIN. The follow-up token hides it with a different decoder setup.</p>
+        </div>
+
+        <div class="field">
+            <label for="followup-request-number">Emergency Code Number</label>
+            <select id="followup-request-number" onchange="clearResult()">
+                <option value="2">Second request - code 2 of 3</option>
+                <option value="3">Third request - code 3 of 3</option>
+            </select>
+            <p class="field-hint">Send code 2 after the first emergency code was already sent. Send code 3 only as the final temporary code.</p>
+        </div>
+
+        <div class="field">
+            <label for="followup-wa-number">Client WhatsApp Number <span style="font-weight:400;letter-spacing:0;text-transform:none;font-size:10px;color:var(--muted-silver)">(optional)</span></label>
+            <input type="tel"
+                   id="followup-wa-number"
+                   class="input-phone"
+                   placeholder="+966501234567"
+                   autocomplete="off">
+            <p class="field-hint">With country code (e.g. +966...). If provided, the button below opens a direct WhatsApp chat.</p>
+        </div>
+
+        <button class="btn-primary" onclick="generateToken('followup')">GENERATE FOLLOW-UP TOKEN</button>
+        <div id="followup-result-anchor"></div>
+
+        <div class="notice">
+            <strong>Client warning:</strong> Tell the customer this is still a temporary 60-minute code. They only have three emergency codes total.
+        </div>
+    </div>
+
+    <!-- ═══════════════ DECODE (VERIFY) PANEL ════════════════════════════════ -->
+    <div class="card tab-panel" id="tab-decode">
+        <div class="field">
+            <label for="token-verify-input">Token to Verify</label>
+            <input type="text"
+                   id="token-verify-input"
+                   placeholder="AA-ANCHOR-..."
+                   maxlength="80"
+                   oninput="clearDecodeResult()"
+                   autocomplete="off">
+            <p class="field-hint">Paste a generated long token here to verify its format and see what PIN it decodes to. Legacy short tokens are still accepted.</p>
+        </div>
+
+        <button class="btn-primary" onclick="decodeToken()">VERIFY TOKEN</button>
+
+        <div class="decode-result" id="decode-result">
+            <p class="decode-label" id="decode-label"></p>
+            <div class="decoded-pin" id="decoded-pin"></div>
+            <p class="decode-sub" id="decode-sub"></p>
+        </div>
+    </div>
+
+    <!-- ─────────────────────── JAVASCRIPT ──────────────────────────────────── -->
+    <script>
+        /**
+         * Request-aware substitution maps. These must stay in sync with
+         * AnchorViewModel.kt:decodeTokenPin().
+         */
+        const SERIAL_ALPHABET = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+        const LENGTH_CODE = { 4: 'K', 5: 'L', 6: 'M', 7: 'N', 8: 'P' };
+        const LENGTH_FROM_CODE = { K: 4, L: 5, M: 6, N: 7, P: 8 };
+        const REQUEST_CODE = { 2: 'U', 3: 'V' };
+        const REQUEST_FROM_CODE = { U: 2, V: 3 };
+        const TOKEN_ENCODE_MAPS = {
+            1: { '0':'Q', '1':'W', '2':'E', '3':'R', '4':'T', '5':'A', '6':'S', '7':'D', '8':'F', '9':'G' },
+            2: { '0':'Z', '1':'Y', '2':'X', '3':'C', '4':'V', '5':'B', '6':'N', '7':'M', '8':'H', '9':'J' },
+            3: { '0':'P', '1':'U', '2':'L', '3':'K', '4':'A', '5':'G', '6':'F', '7':'D', '8':'S', '9':'E' }
+        };
+        const TOKEN_DECODE_MAPS = Object.fromEntries(
+            Object.entries(TOKEN_ENCODE_MAPS).map(([requestNumber, map]) => [
+                Number(requestNumber),
+                Object.fromEntries(Object.entries(map).map(([digit, code]) => [code, digit]))
+            ])
+        );
+        const SERIAL_PAYLOAD_SOURCE = `[KLMNP][${SERIAL_ALPHABET}]{8}|[UV][KLMNP][${SERIAL_ALPHABET}]{8}`;
+        const LEGACY_TOKEN_PATTERN = /^AA-([QWERTASDFG]{4,8})-EXP60$/i;
+        const SERIAL_TOKEN_PATTERN = new RegExp(`^AA-ANCHOR-([${SERIAL_ALPHABET}]{5})-(${SERIAL_PAYLOAD_SOURCE})-([${SERIAL_ALPHABET}]{5})-([${SERIAL_ALPHABET}]{5})-([${SERIAL_ALPHABET}]{5})-([${SERIAL_ALPHABET}]{5})-EXP60$`, 'i');
+
+        let currentToken = '';
+        let currentMode = 'encode';
+        let currentRequestNumber = 1;
+
+        function buildSerialToken(pin, requestNumber = 1) {
+            const encodeMap = TOKEN_ENCODE_MAPS[requestNumber] || TOKEN_ENCODE_MAPS[1];
+            const encoded = pin.split('').map(d => encodeMap[d]).join('');
+            const lengthCode = LENGTH_CODE[encoded.length];
+            const payloadBody = lengthCode + encoded + randomGroup(8 - encoded.length);
+            const payload = requestNumber === 1 ? payloadBody : REQUEST_CODE[requestNumber] + payloadBody;
+            const coverA = randomGroup(5);
+            const coverB = randomGroup(5);
+            const coverC = randomGroup(5);
+            const coverD = randomGroup(5);
+            const checksum = serialChecksum(coverA + payload + coverB + coverC + coverD);
+            return `AA-ANCHOR-${coverA}-${payload}-${coverB}-${coverC}-${coverD}-${checksum}-EXP60`;
+        }
+
+        function randomGroup(length) {
+            const bytes = new Uint32Array(length);
+            if (window.crypto && window.crypto.getRandomValues) {
+                window.crypto.getRandomValues(bytes);
+            } else {
+                for (let i = 0; i < length; i++) bytes[i] = Math.floor(Math.random() * 0xFFFFFFFF);
+            }
+            return Array.from(bytes, value => SERIAL_ALPHABET[value % SERIAL_ALPHABET.length]).join('');
+        }
+
+        function serialChecksum(value) {
+            let out = '';
+            for (let round = 0; round < 5; round++) {
+                let acc = 17 + round * 101;
+                for (let index = 0; index < value.length; index++) {
+                    acc = (acc * 33 + value.charCodeAt(index) + index * (round + 7)) % 1000000007;
+                }
+                out += SERIAL_ALPHABET[acc % SERIAL_ALPHABET.length];
+            }
+            return out;
+        }
+
+        function parseSerialPayload(payload) {
+            let requestNumber = 1;
+            let lengthIndex = 0;
+            if (REQUEST_FROM_CODE[payload[0]]) {
+                requestNumber = REQUEST_FROM_CODE[payload[0]];
+                lengthIndex = 1;
+            }
+
+            const pinLength = LENGTH_FROM_CODE[payload[lengthIndex]];
+            if (!pinLength) return null;
+
+            const encoded = payload.slice(lengthIndex + 1, lengthIndex + 1 + pinLength);
+            const decodeMap = TOKEN_DECODE_MAPS[requestNumber];
+            if (encoded.length !== pinLength || !encoded.split('').every(ch => decodeMap && decodeMap[ch])) return null;
+
+            return { encoded, requestNumber };
+        }
+
+        function parseToken(raw) {
+            const clean = normalizeToken(raw);
+            const legacy = LEGACY_TOKEN_PATTERN.exec(clean);
+            if (legacy) return { type: 'Legacy short', encoded: legacy[1].toUpperCase(), requestNumber: 1 };
+
+            const serial = SERIAL_TOKEN_PATTERN.exec(clean);
+            if (!serial) return null;
+
+            const coverA = serial[1].toUpperCase();
+            const payload = serial[2].toUpperCase();
+            const coverB = serial[3].toUpperCase();
+            const coverC = serial[4].toUpperCase();
+            const coverD = serial[5].toUpperCase();
+            const checksum = serial[6].toUpperCase();
+            if (checksum !== serialChecksum(coverA + payload + coverB + coverC + coverD)) return null;
+
+            const parsedPayload = parseSerialPayload(payload);
+            if (!parsedPayload) return null;
+
+            return {
+                type: parsedPayload.requestNumber === 1 ? 'Long serial' : 'Follow-up serial',
+                encoded: parsedPayload.encoded,
+                requestNumber: parsedPayload.requestNumber
+            };
+        }
+
+        function normalizeToken(raw) {
+            const compact = String(raw || '')
+                .normalize('NFKC')
+                .toUpperCase()
+                .replace(/[\u2010\u2011\u2012\u2013\u2014\u2212\uFE63\uFF0D]/g, '-')
+                .replace(/[\s\u00A0\u061C\u200B\u200C\u200D\u200E\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, '');
+
+            const serial = new RegExp(`AA-?ANCHOR-?([${SERIAL_ALPHABET}]{5})-?(${SERIAL_PAYLOAD_SOURCE})-?([${SERIAL_ALPHABET}]{5})-?([${SERIAL_ALPHABET}]{5})-?([${SERIAL_ALPHABET}]{5})-?([${SERIAL_ALPHABET}]{5})-?EXP60`).exec(compact);
+            if (serial) {
+                return `AA-ANCHOR-${serial[1]}-${serial[2]}-${serial[3]}-${serial[4]}-${serial[5]}-${serial[6]}-EXP60`;
+            }
+
+            const legacy = /AA-?([QWERTASDFG]{4,8})-?EXP60/.exec(compact);
+            return legacy ? `AA-${legacy[1]}-EXP60` : compact;
+        }
+
+        /* ── GENERATE ──────────────────────────────────────────────────────── */
+        function codeLabel(requestNumber) {
+            if (requestNumber === 2) return 'Emergency Code 2 of 3';
+            if (requestNumber === 3) return 'Emergency Code 3 of 3';
+            return 'Emergency Code 1 of 3';
+        }
+
+        function showResultForMode(mode) {
+            const anchor = document.getElementById(`${mode}-result-anchor`);
+            const resultEl = document.getElementById('token-result');
+            if (anchor) anchor.insertAdjacentElement('afterend', resultEl);
+            resultEl.style.display = 'block';
+            resultEl.classList.remove('token-result');
+            resultEl.classList.add('token-result');
+            resultEl.animate([{opacity:0,transform:'translateY(12px)'},{opacity:1,transform:'translateY(0)'}],
+                             {duration:280, easing:'ease', fill:'forwards'});
+        }
+
+        function generateToken(mode = 'encode') {
+            const isFollowup = mode === 'followup';
+            const pinInputId = isFollowup ? 'followup-pin-input' : 'pin-input';
+            const pin = document.getElementById(pinInputId).value.trim();
+            const requestNumber = isFollowup
+                ? Number(document.getElementById('followup-request-number').value)
+                : 1;
+
+            if (!pin) { shake(pinInputId); return; }
+            if (!/^\d{4,8}$/.test(pin)) {
+                alert('PIN must be 4–8 digits (numbers only).');
+                shake(pinInputId);
+                return;
+            }
+
+            currentMode = mode;
+            currentRequestNumber = requestNumber;
+            currentToken = buildSerialToken(pin, requestNumber);
+
+            document.getElementById('result-label').textContent = `${codeLabel(requestNumber)} - Tap to Copy`;
+            document.getElementById('token-string').textContent = currentToken;
+            document.getElementById('copy-hint').textContent = 'Tap to copy';
+            document.getElementById('copy-hint').classList.remove('copied');
+
+            // Auto-copy to clipboard
+            copyToClipboard(currentToken).then(ok => {
+                if (ok) flashCopied();
+            });
+
+            // Build WhatsApp message
+            const waMsg = buildWaMessage(currentToken, requestNumber);
+            document.getElementById('wa-message-text').textContent = waMsg;
+
+            showResultForMode(mode);
+        }
+
+        /* ── WHATSAPP ──────────────────────────────────────────────────────── */
+        function buildWaMessage(token, requestNumber = currentRequestNumber) {
+            const label = codeLabel(requestNumber).toLowerCase();
+            const intro = requestNumber === 1
+                ? 'Hi. Here is your Analog Anchor emergency access token (code 1 of 3):'
+                : `Hi. Here is your follow-up Analog Anchor emergency access token (${label}):`;
+            return `${intro}\n\n${token}\n\nThis is a temporary 60-minute code. You have only three emergency codes total. Paste it into Analog Anchor, or type it exactly if paste is restricted. Delete this message after use.`;
+        }
+
+        function sendWhatsApp() {
+            const phoneId = currentMode === 'followup' ? 'followup-wa-number' : 'wa-number';
+            const phone  = document.getElementById(phoneId).value.trim().replace(/\s+/g,'');
+            const msg    = buildWaMessage(currentToken, currentRequestNumber);
+            const encoded = encodeURIComponent(msg);
+
+            if (phone) {
+                // Direct chat — strip leading + for wa.me format
+                const cleanPhone = phone.replace(/^\+/, '');
+                window.open(`https://wa.me/${cleanPhone}?text=${encoded}`, '_blank');
+            } else {
+                // Show copy-able preview
+                const preview = document.getElementById('wa-preview');
+                preview.style.display = (preview.style.display === 'block') ? 'none' : 'block';
+            }
+        }
+
+        function copyWaMessage() {
+            const msg = document.getElementById('wa-message-text').textContent;
+            copyToClipboard(msg).then(() => {
+                const btn = document.querySelector('.preview-copy-btn');
+                btn.textContent = '✓ COPIED';
+                setTimeout(() => btn.textContent = 'COPY MSG', 2000);
+            });
+        }
+
+        /* ── COPY TOKEN ────────────────────────────────────────────────────── */
+        function copyToken() {
+            if (!currentToken) return;
+            copyToClipboard(currentToken).then(ok => { if (ok) flashCopied(); });
+        }
+
+        function flashCopied() {
+            const hint = document.getElementById('copy-hint');
+            hint.textContent = '✓ Copied!';
+            hint.classList.add('copied');
+            setTimeout(() => {
+                hint.textContent = 'Tap to copy again';
+                hint.classList.remove('copied');
+            }, 2500);
+        }
+
+        function clearResult() {
+            document.getElementById('token-result').style.display = 'none';
+            document.getElementById('wa-preview').style.display = 'none';
+            currentToken = '';
+        }
+
+        /* ── DECODE / VERIFY ───────────────────────────────────────────────── */
+        function decodeToken() {
+            const raw = document.getElementById('token-verify-input').value;
+            const resultEl = document.getElementById('decode-result');
+            const label    = document.getElementById('decode-label');
+            const pinEl    = document.getElementById('decoded-pin');
+            const subEl    = document.getElementById('decode-sub');
+
+            const parsed = parseToken(raw);
+            if (!parsed) {
+                label.textContent   = '✕ Invalid Token Format';
+                label.className     = 'decode-label invalid';
+                pinEl.textContent   = '—';
+                subEl.textContent   = 'Token must be the long AA-ANCHOR serial format. Legacy AA-XXXX-EXP60 tokens are still accepted.';
+                resultEl.className  = 'decode-result invalid';
+                resultEl.style.display = 'block';
+                return;
+            }
+
+            const encoded = parsed.encoded;
+            const decodeMap = TOKEN_DECODE_MAPS[parsed.requestNumber] || TOKEN_DECODE_MAPS[1];
+            const decoded = encoded.split('').map(c => decodeMap[c]).join('');
+
+            label.textContent   = '✓ Valid Token';
+            label.className     = 'decode-label valid';
+            pinEl.textContent   = decoded;
+            subEl.textContent   = `${parsed.type} token (${codeLabel(parsed.requestNumber)}). Encoded section: ${encoded} -> PIN: ${decoded}`;
+            resultEl.className  = 'decode-result valid';
+            resultEl.style.display = 'block';
+        }
+
+        function clearDecodeResult() {
+            document.getElementById('decode-result').style.display = 'none';
+        }
+
+        /* ── TABS ──────────────────────────────────────────────────────────── */
+        function switchTab(name) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`tab-${name}`).classList.add('active');
+            document.getElementById(`tab-${name}-btn`).classList.add('active');
+            clearResult();
+            clearDecodeResult();
+        }
+
+        /* ── HELPERS ───────────────────────────────────────────────────────── */
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                return true;
+            } catch {
+                // Fallback for non-HTTPS contexts (e.g. opening file:// locally)
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.cssText = 'position:fixed;opacity:0;';
+                document.body.appendChild(ta);
+                ta.select();
+                const ok = document.execCommand('copy');
+                document.body.removeChild(ta);
+                return ok;
+            }
+        }
+
+        function shake(id) {
+            const el = document.getElementById(id);
+            el.animate([
+                {transform:'translateX(0)'},{transform:'translateX(-6px)'},
+                {transform:'translateX(6px)'},{transform:'translateX(-4px)'},
+                {transform:'translateX(4px)'},{transform:'translateX(0)'}
+            ], { duration: 400, easing: 'ease' });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analog Anchor — Decoy Token Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --obsidian-bg:       #0B1012;
+            --obsidian-surface:  #11191D;
+            --deep-panel:        #172126;
+            --obsidian-border:   #2B3A40;
+            --muted-silver:      #A2AFB6;
+            --warm-off-white:    #F3F8FA;
+            --glow-cyan:         #7DEEFF;
+            --refined-cyan:      #4DC8DD;
+            --font-main:         'Outfit', sans-serif;
+            --font-mono:         'Roboto Mono', monospace;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--obsidian-bg);
+            color: var(--warm-off-white);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 500px;
+            background: var(--deep-panel);
+            border: 1px solid var(--obsidian-border);
+            border-radius: 20px;
+            padding: 32px 28px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: var(--glow-cyan);
+        }
+
+        p.subtitle {
+            color: var(--muted-silver);
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            height: 56px;
+            background: linear-gradient(135deg, var(--refined-cyan), var(--glow-cyan));
+            border: none;
+            border-radius: 12px;
+            color: var(--obsidian-bg);
+            font-size: 15px;
+            font-weight: 800;
+            font-family: var(--font-main);
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            box-shadow: 0 4px 24px rgba(125,238,255,0.2);
+            transition: 0.2s;
+        }
+
+        .btn-primary:active { transform: scale(0.98); }
+
+        .token-display {
+            background: var(--obsidian-bg);
+            border: 1.5px solid rgba(125,238,255,0.3);
+            border-radius: 12px;
+            padding: 20px 16px;
+            margin-top: 24px;
+            display: none;
+            word-break: break-all;
+        }
+
+        .token-string {
+            font-family: var(--font-mono);
+            font-size: 18px;
+            color: var(--glow-cyan);
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .btn-action {
+            width: 100%;
+            height: 48px;
+            border-radius: 10px;
+            border: 1.5px solid var(--obsidian-border);
+            background: var(--obsidian-surface);
+            color: var(--warm-off-white);
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Decoy Generator</h1>
+        <p class="subtitle">Generate a fake 60-minute token to provide the illusion of an emergency unlock.</p>
+
+        <button class="btn-primary" onclick="generateDecoy()">GENERATE DECOY TOKEN</button>
+
+        <div class="token-display" id="token-display">
+            <div class="token-string" id="token-string"></div>
+            <button class="btn-action" onclick="copyToken()">COPY TOKEN</button>
+        </div>
+    </div>
+
+    <script>
+        function generateDecoy() {
+            const charPool = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+            const randomString = (length) => Array.from({length}, () => charPool[Math.floor(Math.random() * charPool.length)]).join('');
+            
+            const coverA = randomString(5);
+            const payload = "M" + randomString(8);
+            const coverB = randomString(5);
+            const coverC = randomString(5);
+            const coverD = randomString(5);
+            const checksum = randomString(5);
+
+            const token = `AA-ANCHOR-${coverA}-${payload}-${coverB}-${coverC}-${coverD}-${checksum}-DEC60`;
+            
+            document.getElementById('token-string').innerText = token;
+            document.getElementById('token-display').style.display = 'block';
+        }
+
+        function copyToken() {
+            const token = document.getElementById('token-string').innerText;
+            navigator.clipboard.writeText(token).then(() => {
+                alert("Decoy token copied to clipboard!");
+            });
+        }
+    </script>
+</body>
+</html>

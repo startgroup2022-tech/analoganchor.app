@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="day_guard_active">تطبيق انالوج انشور نشط حالياً لهذا التطبيق.</string>
+    <string name="how_long_to_use">كم من الوقت تريد استخدامه؟</string>
+    <string name="minutes_label_short">%1$d دقيقة</string>
+    <string name="close_app">إغلاق التطبيق</string>
+    <string name="hud_appearance">مظهر المؤقت العائم</string>
+    <string name="preview">معاينة</string>
+</resources>
